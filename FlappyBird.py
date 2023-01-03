@@ -41,7 +41,7 @@ class Passaro:
         self.imagem = self.IMGS[0]
 
     def pular(self):
-        self.velocidade = 10,5
+        self.velocidade = -10.5
         self.tempo = 0
         self.altura = self.y
 
@@ -142,7 +142,6 @@ class Cano:
 
         if base_ponto or topo_ponto:
             return True
-
         else:
             return False
 
@@ -161,10 +160,9 @@ class Chao:
         self.x2 -= self.VELOCIDADE
 
         if self.x1 + self.LARGURA < 0:
-            self.x1 = self.x1 + self.LARGURA
-
+            self.x1 = self.x2 + self.LARGURA
         if self.x2 + self.LARGURA < 0:
-            self.x2 = self.x2 + self.LARGURA
+            self.x2 = self.x1 + self.LARGURA
 
     def desenhar(self, tela):
         tela.blit(self.IMAGEM, (self.x1, self.y))
@@ -173,9 +171,9 @@ class Chao:
 
 def desenhar_tela(tela, passaros, canos, chao, pontos):
     tela.blit(IMAGEM_BACKGROUND, (0,0))
+
     for passaro in passaros:
         passaro.desenhar(tela)
-
     for cano in canos:
         cano.desenhar(tela)
 
@@ -273,12 +271,12 @@ def main(genomas, config):
 
         if adicionar_cano:
             pontos += 1
-            cano.append(Cano(600))
+            canos.append(Cano(600))
             for genoma in lista_genomas:
                 genoma.fitness += 5
 
         for cano in remover_canos:
-            canos.remover(cano)
+            canos.remove(cano)
 
         for i, passaro in enumerate(passaros):
             if (passaro.y + passaro.imagem.get_height()) > chao.y or passaro.y < 0:
